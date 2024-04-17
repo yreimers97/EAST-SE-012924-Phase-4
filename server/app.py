@@ -6,15 +6,19 @@ from flask import Flask, make_response
 # New imports start here
 from flask_migrate import Migrate
 
-from models import db
+from models import db, Hotel
 # New imports end here
 
 app = Flask(__name__)
+@app.route('/hotels')
+def all_hotels():
+    response_body = [hotel.to_dict(only =('id', 'name')) for hotel in Hotel.query.all()]
+    return make_response(response_body)
 
 # New code starts here
 
 # configure a database connection to the local file examples.db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///examples.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hotels.db'
 
 # disable modification tracking to use less memory
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
